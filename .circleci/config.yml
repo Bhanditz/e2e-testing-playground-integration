@@ -27,16 +27,17 @@ jobs:
 
       # Tag master docker images
       - run: |
-          TAG=0.1.$CIRCLE_BUILD_NUM.master
-          
+          TAG=0.1.$CIRCLE_BUILD_NUM
+          TAG_MASTER=$TAG.master
+
           USERNAME=danielesalvatore
           SERVER=e2e-testing-playground-server
           CLIENT=e2e-testing-playground-server
           
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           
-          docker tag $USERNAME/$SERVER:$TAG 
-          docker tag $USERNAME/$CLIENT:$TAG
+          docker tag $USERNAME/$SERVER:$TAG $USERNAME/$SERVER:$TAG_MASTER
+          docker tag $USERNAME/$CLIENT:$TAG $USERNAME/$CLIENT:$TAG_MASTER
           
-          docker push $USERNAME/$SERVER:$TAG 
-          docker push $USERNAME/$CLIENT:$TAG 
+          docker push $USERNAME/$SERVER:$TAG_MASTER 
+          docker push $USERNAME/$CLIENT:$TAG_MASTER 

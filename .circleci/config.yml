@@ -1,13 +1,27 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: debian:stretch
+    machine: true
+
+    working_directory: ~/app
+
     steps:
+        
       - checkout
+
+      # This should go into custom primary image, here's only for the sake of explanation
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: Install Cypress
+          command: |
+            set -x
+            npm install cypress -g
+
       - run:
-          name: Print the Current Time
-          command: date
+          name: Start containers
+          command: |
+            set -x
+            docker-compose up -d
+
+      - run:
+          name: Running E2E tests
+          command: cypress run

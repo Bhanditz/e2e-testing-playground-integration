@@ -1,9 +1,7 @@
 version: 2
 jobs:
   build:
-    docker:
-      # the Docker image with Cypress preinstalled
-      - image: cypress/internal:cy-0.19.4
+    machine: true
 
     working_directory: ~/app
 
@@ -15,13 +13,10 @@ jobs:
 
       # This should go into custom primary image, here's only for the sake of explanation
       - run:
-          name: Install Docker client
+          name: Install Cypress
           command: |
             set -x
-            VER="17.03.0-ce"
-            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            sudo mv /tmp/docker/* /usr/bin
+            npm install cypress -g
 
       # This should go into custom primary image, here's only for the sake of explanation
       - run:
@@ -29,13 +24,13 @@ jobs:
           command: |
             set -x
             curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
       
       - run:
           name: Start containers and verify it's working
           command: |
             set -x
-            sudo docker-compose up -d
+            docker-compose up -d
 
       - run:
           name: Running E2E tests

@@ -24,3 +24,19 @@ jobs:
       - run:
           name: Running E2E tests
           command: cypress run
+
+      # Tag master docker images
+      - run: |
+          TAG=0.1.$CIRCLE_BUILD_NUM.master
+          
+          USERNAME=danielesalvatore
+          SERVER=e2e-testing-playground-server
+          CLIENT=e2e-testing-playground-server
+          
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          
+          docker tag $USERNAME/$SERVER:$TAG 
+          docker tag $USERNAME/$CLIENT:$TAG
+          
+          docker push $USERNAME/$SERVER:$TAG 
+          docker push $USERNAME/$CLIENT:$TAG 
